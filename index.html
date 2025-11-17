@@ -167,7 +167,7 @@
     </nav>
 
     <!-- Mobile Menu Overlay (hidden by default) -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center gap-10 text-2xl font-display font-bold
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-white/90 backdrop-blur-xl z-40 flex flex-col items-center justify-start pt-24 gap-8 text-2xl font-display font-bold
                                         hidden opacity-0 transition-opacity duration-300">
         <a href="#about" class="mobile-menu-link hover:text-neutral-600">About</a>
         <a href="#skills" class="mobile-menu-link hover:text-neutral-600">Skills</a>
@@ -200,7 +200,7 @@
                     <a href="#contact" class="bg-black text-white px-8 py-4 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-xl shadow-black/10">
                         START A PROJECT
                     </a>
-                    <a href="#" class="bg-white border border-black/10 px-8 py-4 rounded-full font-bold text-sm hover:bg-gray-50 transition-colors flex items-center gap-2 group">
+                    <a href="#projects" class="bg-white border border-black/10 px-8 py-4 rounded-full font-bold text-sm hover:bg-gray-50 transition-colors flex items-center gap-2 group">
                         <div class="w-2 h-2 rounded-full bg-black group-hover:bg-accent transition-colors"></div>
                         VIEW PORTFOLIO
                     </a>
@@ -460,13 +460,13 @@
 
                 <!-- Skill Card 3: Data Science -->
                 <div class="skill-card bg-white p-8 rounded-3xl border border-black/5 shadow-sm group reveal-on-scroll delay-200">
-                     <div class="flex items-center gap-4 mb-8">
+                      <div class="flex items-center gap-4 mb-8">
                          <div class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl text-purple-600 group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-chart-pie"></i>
                         </div>
                         <h4 class="text-2xl font-bold">Data Science <span class="text-sm font-normal text-neutral-400">(Learning)</span></h4>
                     </div>
-                     <div class="grid grid-cols-3 sm:grid-cols-3 gap-6">
+                      <div class="grid grid-cols-3 sm:grid-cols-3 gap-6">
                         <!-- Pandas -->
                         <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-table text-4xl text-purple-600"></i>
@@ -487,13 +487,13 @@
 
                 <!-- Skill Card 4: Tools -->
                  <div class="skill-card bg-white p-8 rounded-3xl border border-black/5 shadow-sm group reveal-on-scroll delay-300">
-                     <div class="flex items-center gap-4 mb-8">
+                       <div class="flex items-center gap-4 mb-8">
                          <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-2xl text-orange-600 group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-screwdriver-wrench"></i>
                         </div>
                         <h4 class="text-2xl font-bold">Tools</h4>
                     </div>
-                     <div class="grid grid-cols-3 sm:grid-cols-3 gap-6">
+                       <div class="grid grid-cols-3 sm:grid-cols-3 gap-6">
                         <!-- Git -->
                         <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
                             <i class="fa-brands fa-git-alt text-4xl text-orange-600"></i>
@@ -753,81 +753,81 @@
             observer.observe(el);
         });
 
-        // 5. LIGHTBOX GALLERY LOGIC
+        // 5. MERGED LIGHTBOX & MOBILE MENU LOGIC
         document.addEventListener('DOMContentLoaded', () => {
-            const galleryGrid = document.getElementById('project-gallery-grid');
-            if (!galleryGrid) return;
-
-            const thumbnails = galleryGrid.querySelectorAll('.project-thumbnail');
-            const images = Array.from(thumbnails).map(thumb => thumb.src);
-            let currentImageIndex = 0;
-
-            const lightbox = document.getElementById('lightbox-overlay');
-            const lightboxImage = document.getElementById('lightbox-image');
-            const lightboxClose = document.getElementById('lightbox-close');
-            const lightboxPrev = document.getElementById('lightbox-prev');
-            const lightboxNext = document.getElementById('lightbox-next');
-            const lightboxCounter = document.getElementById('lightbox-counter');
-
-            function showImage(index) {
-                lightboxImage.src = images[index];
-                lightboxCounter.textContent = `${index + 1} / ${images.length}`;
-                currentImageIndex = index;
-            }
-
-            function openLightbox(index) {
-                showImage(index);
-                lightbox.classList.remove('hidden');
-                setTimeout(() => lightbox.classList.remove('opacity-0'), 10); // For fade-in
-            }
-
-            function closeLightbox() {
-                lightbox.classList.add('opacity-0');
-                setTimeout(() => lightbox.classList.add('hidden'), 300); // For fade-out
-            }
-
-            thumbnails.forEach(thumb => {
-                thumb.addEventListener('click', (e) => {
-                    const index = parseInt(e.target.dataset.index, 10);
-                    openLightbox(index);
-                });
-            });
-
-            lightboxClose.addEventListener('click', closeLightbox);
             
-            lightboxNext.addEventListener('click', () => {
-                const nextIndex = (currentImageIndex + 1) % images.length;
-                showImage(nextIndex);
-            });
+            // --- LIGHTBOX GALLERY SETUP ---
+            const galleryGrid = document.getElementById('project-gallery-grid');
+            if (galleryGrid) {
+                const thumbnails = galleryGrid.querySelectorAll('.project-thumbnail');
+                const images = Array.from(thumbnails).map(thumb => thumb.src);
+                let currentImageIndex = 0;
 
-            lightboxPrev.addEventListener('click', () => {
-                const prevIndex = (currentImageIndex - 1 + images.length) % images.length;
-                showImage(prevIndex);
-            });
+                const lightbox = document.getElementById('lightbox-overlay');
+                const lightboxImage = document.getElementById('lightbox-image');
+                const lightboxClose = document.getElementById('lightbox-close');
+                const lightboxPrev = document.getElementById('lightbox-prev');
+                const lightboxNext = document.getElementById('lightbox-next');
+                const lightboxCounter = document.getElementById('lightbox-counter');
 
-            // Close on backdrop click
-            lightbox.addEventListener('click', (e) => {
-                if (e.target === lightbox) {
-                    closeLightbox();
+                function showImage(index) {
+                    lightboxImage.src = images[index];
+                    lightboxCounter.textContent = `${index + 1} / ${images.length}`;
+                    currentImageIndex = index;
                 }
-            });
 
-            // Keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                if (lightbox.classList.contains('hidden')) return;
-
-                if (e.key === 'Escape') {
-                    closeLightbox();
-                } else if (e.key === 'ArrowRight') {
-                    lightboxNext.click();
-                } else if (e.key === 'ArrowLeft') {
-                    lightboxPrev.click();
+                function openLightbox(index) {
+                    showImage(index);
+                    lightbox.classList.remove('hidden');
+                    setTimeout(() => lightbox.classList.remove('opacity-0'), 10); // For fade-in
                 }
-            });
-        });
 
-        // 6. MOBILE MENU LOGIC
-        document.addEventListener('DOMContentLoaded', () => {
+                function closeLightbox() {
+                    lightbox.classList.add('opacity-0');
+                    setTimeout(() => lightbox.classList.add('hidden'), 300); // For fade-out
+                }
+
+                thumbnails.forEach(thumb => {
+                    thumb.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.dataset.index, 10);
+                        openLightbox(index);
+                    });
+                });
+
+                if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+                
+                if (lightboxNext) lightboxNext.addEventListener('click', () => {
+                    const nextIndex = (currentImageIndex + 1) % images.length;
+                    showImage(nextIndex);
+                });
+
+                if (lightboxPrev) lightboxPrev.addEventListener('click', () => {
+                    const prevIndex = (currentImageIndex - 1 + images.length) % images.length;
+                    showImage(prevIndex);
+                });
+
+                // Close on backdrop click
+                if (lightbox) lightbox.addEventListener('click', (e) => {
+                    if (e.target === lightbox) {
+                        closeLightbox();
+                    }
+                });
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (lightbox.classList.contains('hidden')) return;
+
+                    if (e.key === 'Escape') {
+                        closeLightbox();
+                    } else if (e.key === 'ArrowRight') {
+                        lightboxNext.click();
+                    } else if (e.key === 'ArrowLeft') {
+                        lightboxPrev.click();
+                    }
+                });
+            } // End of Lightbox Setup
+
+            // --- MOBILE MENU SETUP ---
             const menuBtn = document.getElementById('mobile-menu-btn');
             const menuOverlay = document.getElementById('mobile-menu-overlay');
             if (!menuBtn || !menuOverlay) return; // Guard clause
@@ -866,7 +866,9 @@
             menuLinks.forEach(link => {
                 link.addEventListener('click', toggleMenu);
             });
-        });
+            // --- End of Mobile Menu Setup ---
+
+        }); // End of DOMContentLoaded
     </script>
 </body>
 </html>
