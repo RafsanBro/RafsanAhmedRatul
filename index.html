@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rafsan Ahmed Ratul | Web Developer</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        accent: '#C4F43E', 
+                        dark: '#050505',
+                        card: '#ffffff',
+                        subtle: '#f3f4f6'
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'marquee': 'marquee 40s linear infinite', 
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base Styles */
+        body {
+            background-color: #ffffff;
+            color: #0a0a0a;
+            overflow-x: hidden;
+        }
+
+        /* Technical Grid Background */
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #fff; }
+        ::-webkit-scrollbar-thumb { background: #000; border-radius: 5px; }
+
+        /* Animations */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Image Blotter Effect */
+        .blob-shape {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation: blob-bounce 8s ease-in-out infinite alternate;
+        }
+        @keyframes blob-bounce {
+            0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            100% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+        }
+        
+        /* Aesthetic Stroke Text Effect */
+        .stroke-text {
+            -webkit-text-stroke: 1px white;
+            color: transparent;
+        }
+
+        /* 3D TILT & SPOTLIGHT CARD STYLES */
+        .skill-card {
+            position: relative;
+            overflow: hidden;
+            background: white;
+            border-radius: 1.5rem;
+            /* Smooth transition for shadow, faster for transform to feel responsive */
+            transition: box-shadow 0.3s ease, transform 0.1s ease-out;
+            will-change: transform;
+        }
+        
+        /* The "Spotlight" layer */
+        .skill-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(
+                600px circle at var(--mouse-x) var(--mouse-y), 
+                rgba(0, 0, 0, 0.03), /* Subtle darkness for depth */
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .skill-card:hover::after {
+            opacity: 1;
+        }
+        
+        /* Ensure content stays on top */
+        .skill-card > * {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-black selection:text-accent">
+
+    <!-- Technical Background Grid -->
+    <div class="fixed inset-0 grid-bg -z-10 pointer-events-none h-screen"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-black/5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-8 h-8 bg-black text-white flex items-center justify-center rounded font-bold text-sm group-hover:bg-accent group-hover:text-black transition-colors">R</div>
+                <span class="text-lg font-display font-bold tracking-tight">RAFSAN.DEV</span>
+            </a>
+            
+            <div class="hidden md:flex gap-8 font-sans text-sm font-medium items-center">
+                <a href="#about" class="hover:text-neutral-600 transition-colors">About</a>
+                <a href="#skills" class="hover:text-neutral-600 transition-colors">Skills</a>
+                <a href="#projects" class="hover:text-neutral-600 transition-colors">Projects</a>
+                <a href="#contact" class="hover:text-neutral-600 transition-colors">Contact</a>
+                <a href="./Rafsan Ahmed Ratul CV.pdf" download class="bg-black text-white px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2
+                                    hover:bg-neutral-800 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20">
+                    <i class="fa-solid fa-file-arrow-down"></i> RESUME
+                </a>
+            </div>
+
+            <button id="mobile-menu-btn" class="md:hidden text-black text-xl z-[60]"> <!-- Set z-index higher than overlay -->
+                <i class="fa-solid fa-bars"></i>
+                <i class="fa-solid fa-times hidden"></i> <!-- Added close icon -->
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay (hidden by default) -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center gap-10 text-2xl font-display font-bold
+                                        hidden opacity-0 transition-opacity duration-300">
+        <a href="#about" class="mobile-menu-link hover:text-neutral-600">About</a>
+        <a href="#skills" class="mobile-menu-link hover:text-neutral-600">Skills</a>
+        <a href="#projects" class="mobile-menu-link hover:text-neutral-600">Projects</a>
+        <a href="#contact" class="mobile-menu-link hover:text-neutral-600">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center px-6 pt-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            <!-- Text Content -->
+            <div class="order-2 lg:order-1 relative z-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 border border-black/5 text-xs font-bold tracking-widest mb-6 reveal-on-scroll">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    AVAILABLE FOR WORK
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-[0.95] tracking-tighter mb-6 text-black reveal-on-scroll delay-100">
+                    RAFSAN <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neutral-400 to-neutral-200">AHMED</span> <br>
+                    RATUL
+                </h1>
+                
+                <p class="text-neutral-600 max-w-lg text-lg leading-relaxed mb-10 reveal-on-scroll delay-200">
+                    <span class="font-bold text-black">Web Developer</span> specializing in fast, scalable front-end interfaces and interactive experiences.
+                </p>
+                
+                <div class="flex flex-wrap gap-4 reveal-on-scroll delay-300">
+                    <a href="#contact" class="bg-black text-white px-8 py-4 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-xl shadow-black/10">
+                        START A PROJECT
+                    </a>
+                    <a href="#" class="bg-white border border-black/10 px-8 py-4 rounded-full font-bold text-sm hover:bg-gray-50 transition-colors flex items-center gap-2 group">
+                        <div class="w-2 h-2 rounded-full bg-black group-hover:bg-accent transition-colors"></div>
+                        VIEW PORTFOLIO
+                    </a>
+                </div>
+
+                <div class="mt-12 flex items-center gap-6 text-2xl text-neutral-400 reveal-on-scroll delay-500">
+                     <a href="#" class="hover:text-black transition-colors hover:-translate-y-1 duration-300"><i class="fa-brands fa-github"></i></a>
+                     <a href="#" class="hover:text-black transition-colors hover:-translate-y-1 duration-300"><i class="fa-brands fa-linkedin"></i></a>
+                     <a href="#" class="hover:text-black transition-colors hover:-translate-y-1 duration-300"><i class="fa-brands fa-facebook"></i></a>
+                </div>
+            </div>
+
+            <!-- Profile Image Area -->
+            <div class="order-1 lg:order-2 relative flex justify-center lg:justify-end reveal-on-scroll delay-200">
+                <!-- Decorative Blob Background -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-gray-100 to-gray-50 blob-shape -z-10 opacity-80"></div>
+                
+                <!-- Image Container -->
+                <div class="relative w-72 h-72 md:w-96 md:h-96">
+                    <!-- Profile Picture (Placeholder) -->
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" 
+                         alt="Rafsan Ahmed Ratul" 
+                         class="w-full h-full object-cover rounded-[2rem] rotate-3 hover:rotate-0 transition-transform duration-500 shadow-2xl shadow-black/5 border-4 border-white">
+                    
+                    <!-- Floating Badge 1 -->
+                    <div class="absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-xl shadow-black/5 animate-float border border-black/5">
+                        <i class="fa-brands fa-react text-3xl text-cyan-400 spin-slow"></i>
+                    </div>
+                    
+                    <!-- Floating Badge 2 -->
+                    <div class="absolute -bottom-6 -left-6 bg-black text-white p-4 rounded-2xl shadow-xl shadow-black/20 animate-float" style="animation-delay: 1s;">
+                        <div class="text-xs font-bold uppercase opacity-70">Learning</div>
+                        <div class="text-2xl font-bold">2+ Years</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee (Infinite Scroll) -->
+    <div class="py-10 bg-black text-white overflow-hidden rotate-1 scale-105 border-y-4 border-accent/50 group">
+        <div class="animate-marquee whitespace-nowrap flex gap-20 items-center font-display font-bold text-4xl uppercase tracking-widest">
+            
+            <!-- SET 1 -->
+            <div class="flex items-center gap-3">
+                <i class="fa-brands fa-js text-3xl transition-colors duration-300 group-hover:text-yellow-400"></i>
+                <span>JavaScript</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <div class="flex items-center gap-3">
+                <i class="fa-brands fa-python text-3xl transition-colors duration-300 group-hover:text-blue-400"></i>
+                <span class="stroke-text">Python</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <div class="flex items-center gap-3">
+                <i class="fa-brands fa-react text-3xl transition-colors duration-300 group-hover:text-cyan-400"></i>
+                <span>React</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <div class="flex items-center gap-3">
+                <i class="fa-brands fa-node-js text-3xl transition-colors duration-300 group-hover:text-green-500"></i>
+                <span class="stroke-text">Node.js</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-wind text-3xl transition-colors duration-300 group-hover:text-cyan-300"></i>
+                <span>Tailwind</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-code text-3xl transition-colors duration-300 group-hover:text-blue-600"></i>
+                <span class="stroke-text">C++</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <div class="flex items-center gap-3">
+                <i class="fa-brands fa-figma text-3xl transition-colors duration-300 group-hover:text-purple-500"></i>
+                <span>Figma</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-table text-3xl transition-colors duration-300 group-hover:text-white"></i>
+                <span class="stroke-text">Pandas</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <!-- DUPLICATE SET (For Seamless Loop) -->
+            <div class="flex items-center gap-3">
+                <i class="fa-brands fa-js text-3xl transition-colors duration-300 group-hover:text-yellow-400"></i>
+                <span>JavaScript</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <div class="flex items-center gap-3">
+                <i class="fa-brands fa-python text-3xl transition-colors duration-300 group-hover:text-blue-400"></i>
+                <span class="stroke-text">Python</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <div class="flex items-center gap-3">
+                <i class="fa-brands fa-react text-3xl transition-colors duration-300 group-hover:text-cyan-400"></i>
+                <span>React</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+            <div class="flex items-center gap-3">
+                <i class="fa-brands fa-node-js text-3xl transition-colors duration-300 group-hover:text-green-500"></i>
+                <span class="stroke-text">Node.js</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+            
+             <div class="flex items-center gap-3">
+                <i class="fa-solid fa-wind text-3xl transition-colors duration-300 group-hover:text-cyan-300"></i>
+                <span>Tailwind</span>
+            </div>
+            <span class="text-accent text-xl">✦</span>
+        </div>
+    </div>
+
+    <!-- Experience & About Grid (Moved Up) -->
+    <section id="about" class="py-32 px-6 bg-white relative z-10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+            
+            <!-- About Text -->
+            <div class="reveal-on-scroll">
+                <h2 class="text-4xl font-display font-bold mb-8">About Me</h2>
+                <div class="prose prose-lg text-neutral-600">
+                    <p class="mb-6">
+                        I am a Computer Science & Engineering student at <strong class="text-black">American International University Bangladesh</strong>, driven by a passion for technology and leadership.
+                    </p>
+                    <p class="mb-6">
+                        I specialize in clean, maintainable front-end solutions while continuously exploring modern technologies to strengthen my analytical thinking. I am committed to continuous growth and pushing myself both personally and professionally.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="relative reveal-on-scroll delay-200">
+                <div class="absolute left-0 top-0 h-full w-px bg-gray-200 ml-4"></div>
+                
+                <!-- Item 1 -->
+                <div class="relative pl-12 mb-10 group">
+                    <div class="absolute left-0 top-1 w-8 h-8 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center group-hover:border-black transition-colors">
+                        <div class="w-3 h-3 bg-gray-300 rounded-full group-hover:bg-black transition-colors"></div>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-neutral-400">Present</span>
+                    <h4 class="text-xl font-bold mt-1">Front-End Web Application Developer</h4>
+                    <p class="text-neutral-600">Freelance / Remote</p>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="relative pl-12 mb-10 group">
+                    <div class="absolute left-0 top-1 w-8 h-8 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center group-hover:border-black transition-colors">
+                        <div class="w-3 h-3 bg-gray-300 rounded-full group-hover:bg-black transition-colors"></div>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-neutral-400">2022 - Present</span>
+                    <h4 class="text-xl font-bold mt-1">BSc in Computer Science</h4>
+                    <p class="text-neutral-600">American International University Bangladesh</p>
+                </div>
+                
+                <!-- Item 3 -->
+                <div class="relative pl-12 group">
+                    <div class="absolute left-0 top-1 w-8 h-8 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center group-hover:border-black transition-colors">
+                        <div class="w-3 h-3 bg-gray-300 rounded-full group-hover:bg-black transition-colors"></div>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-neutral-400">2022</span>
+                    <h4 class="text-xl font-bold mt-1">Started Coding Journey</h4>
+                    <p class="text-neutral-600">Self-Taught Development</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services / Skills Section (Renamed) -->
+    <section id="skills" class="py-32 px-6 bg-gray-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-20 reveal-on-scroll">
+                <h2 class="text-sm font-bold tracking-widest uppercase text-neutral-500 mb-3">My Expertise</h2>
+                <h3 class="text-4xl md:text-5xl font-display font-bold">Technical Skills & Tools</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Skill Card 1: Frontend -->
+                <div class="skill-card bg-white p-8 rounded-3xl border border-black/5 shadow-sm group reveal-on-scroll">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl text-blue-600 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold">Frontend</h4>
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-5 gap-6">
+                        <!-- HTML -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-brands fa-html5 text-4xl text-orange-500"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">HTML</span>
+                        </div>
+                        <!-- CSS -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-brands fa-css3-alt text-4xl text-blue-600"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">CSS</span>
+                        </div>
+                        <!-- JS -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-brands fa-js text-4xl text-yellow-400"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">JS</span>
+                        </div>
+                        <!-- React -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-brands fa-react text-4xl text-cyan-400 animate-spin-slow"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">React</span>
+                        </div>
+                        <!-- Tailwind -->
+                         <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-wind text-4xl text-cyan-300"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Tailwind</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Card 2: Backend -->
+                <div class="skill-card bg-white p-8 rounded-3xl border border-black/5 shadow-sm group reveal-on-scroll delay-100">
+                    <div class="flex items-center gap-4 mb-8">
+                         <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-2xl text-green-600 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold">Backend <span class="text-sm font-normal text-neutral-400">(Learning)</span></h4>
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-4 gap-6">
+                         <!-- Node -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-brands fa-node-js text-4xl text-green-500"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Node.js</span>
+                        </div>
+                        <!-- Express -->
+                         <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-network-wired text-4xl text-gray-800"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Express</span>
+                        </div>
+                        <!-- Python -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-brands fa-python text-4xl text-blue-500"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Python</span>
+                        </div>
+                         <!-- Django -->
+                         <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-layer-group text-4xl text-green-700"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Django</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Card 3: Data Science -->
+                <div class="skill-card bg-white p-8 rounded-3xl border border-black/5 shadow-sm group reveal-on-scroll delay-200">
+                     <div class="flex items-center gap-4 mb-8">
+                         <div class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl text-purple-600 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold">Data Science <span class="text-sm font-normal text-neutral-400">(Learning)</span></h4>
+                    </div>
+                     <div class="grid grid-cols-3 sm:grid-cols-3 gap-6">
+                        <!-- Pandas -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-table text-4xl text-purple-600"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Pandas</span>
+                        </div>
+                        <!-- NumPy -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-cube text-4xl text-blue-400"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">NumPy</span>
+                        </div>
+                         <!-- ML -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-brain text-4xl text-pink-500"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">ML</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Card 4: Tools -->
+                 <div class="skill-card bg-white p-8 rounded-3xl border border-black/5 shadow-sm group reveal-on-scroll delay-300">
+                     <div class="flex items-center gap-4 mb-8">
+                         <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-2xl text-orange-600 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold">Tools</h4>
+                    </div>
+                     <div class="grid grid-cols-3 sm:grid-cols-3 gap-6">
+                        <!-- Git -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-brands fa-git-alt text-4xl text-orange-600"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Git</span>
+                        </div>
+                         <!-- Docker -->
+                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-brands fa-docker text-4xl text-blue-600"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Docker</span>
+                        </div>
+                        <!-- VSCode -->
+                         <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-code text-4xl text-blue-500"></i>
+                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">VSCode</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Highlight -->
+    <section id="projects" class="py-32 px-6 bg-black text-white relative overflow-hidden">
+        <!-- Glow effect -->
+        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16">
+                <h2 class="text-4xl md:text-6xl font-display font-bold">Featured Work</h2>
+            </div>
+
+            <!-- Single Project Box with 4-Image Grid -->
+            <div class="max-w-4xl mx-auto">
+                <div class="group reveal-on-scroll">
+                    <!-- 2x2 Image Grid Container -->
+                    <div id="project-gallery-grid" class="bg-neutral-900 rounded-3xl overflow-hidden aspect-video border border-white/10 relative mb-6 shadow-2xl shadow-black/50 grid grid-cols-2 grid-rows-2 gap-2 p-2">
+                        <!-- Image 1 -->
+                        <img src="p1.png" 
+                             alt="Portfolio Screenshot 1" 
+                             data-index="0"
+                             class="project-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100 cursor-pointer">
+                        
+                        <!-- Image 2 -->
+                        <img src="p2.png" 
+                             alt="Portfolio Screenshot 2" 
+                             data-index="1"
+                             class="project-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100" style="transition-delay: 100ms; cursor: pointer;">
+                        
+                        <!-- Image 3 -->
+                        <img src="p3.png" 
+                             alt="Portfolio Screenshot 3" 
+                             data-index="2"
+                             class="project-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100" style="transition-delay: 200ms; cursor: pointer;">
+                        
+                        <!-- Image 4 -->
+                        <img src="p4.png" 
+                             alt="Portfolio Screenshot 4" 
+                             data-index="3"
+                             class="project-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100" style="transition-delay: 300ms; cursor: pointer;">
+                    </div>
+
+                    <!-- Project Description -->
+                    <div class="flex flex-col md:flex-row justify-between items-start gap-4">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-1">Personal Portfolio Website</h3>
+                            <p class="text-neutral-400 text-sm mb-3 max-w-lg">A high-performance, ultra-modern personal portfolio designed to showcase my skills in Web Development. Built with a focus on clean aesthetics, smooth animations, and responsiveness.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 rounded-full border border-white/20 text-xs text-neutral-300 bg-white/5">HTML</span>
+                                <span class="px-3 py-1 rounded-full border border-white/20 text-xs text-neutral-300 bg-white/5">Tailwind</span>
+                                <span class="px-3 py-1 rounded-full border border-white/20 text-xs text-neutral-300 bg-white/5">JavaScript</span>
+                            </div>
+                        </div>
+                        <a href="#" class="bg-white text-black px-6 py-3 rounded-full font-bold text-sm shadow-xl flex items-center gap-2 hover:bg-gray-100 mt-4 md:mt-0 flex-shrink-0">
+                            <span>View Live Project</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+            </div> <!-- End of single project box -->
+
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 px-6 bg-gray-50 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal-on-scroll">
+                <h2 class="text-sm font-bold tracking-widest uppercase text-neutral-500 mb-3">Get In Touch</h2>
+                <h3 class="text-4xl md:text-5xl font-display font-bold">Let's build something <br> amazing together.</h3>
+            </div>
+
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Contact Details -->
+                <div class="reveal-on-scroll delay-100">
+                    <h4 class="text-2xl font-bold mb-8">Contact Details</h4>
+                    <div class="space-y-6">
+                        <!-- Email -->
+                        <div class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 bg-white border border-black/10 rounded-xl flex items-center justify-center text-lg text-black group-hover:bg-black group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-neutral-500">Email</span>
+                                <a href="mailto:rafsanahmed308@gmail.com" class="text-lg font-bold block hover:underline">rafsanahmed308@gmail.com</a>
+                            </div>
+                        </div>
+                        <!-- Phone -->
+                        <div class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 bg-white border border-black/10 rounded-xl flex items-center justify-center text-lg text-black group-hover:bg-black group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-neutral-500">Phone</span>
+                                <a href="tel:+8801788776453" class="text-lg font-bold block hover:underline">+880 1788776453</a>
+                            </div>
+                        </div>
+                        <!-- Location -->
+                        <div class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 bg-white border border-black/10 rounded-xl flex items-center justify-center text-lg text-black group-hover:bg-black group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-neutral-500">Location</span>
+                                <p class="text-lg font-bold">Dhaka, Bangladesh</p>
+                            </div>
+                        </div>
+                        <!-- CV -->
+                        <a href="./Rafsan Ahmed Ratul CV.pdf" download class="flex items-center gap-4 group bg-white p-4 rounded-2xl border border-black/10 transition-all duration-300 hover:shadow-xl hover:border-black/20 hover:-translate-y-1">
+                            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-lg text-black transition-colors group-hover:bg-black group-hover:text-white">
+                                <i class="fa-solid fa-file-arrow-down transition-transform duration-300 group-hover:scale-110"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-neutral-500">My CV</span>
+                                <p class="text-lg font-bold block text-black">Download Resume</p>
+                            </div>
+                            <i class="fa-solid fa-arrow-right text-neutral-300 ml-auto transition-transform duration-300 group-hover:translate-x-1 group-hover:text-black"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="bg-white p-8 rounded-3xl border border-black/10 shadow-lg shadow-black/5 reveal-on-scroll delay-200">
+                    <form action="#" class="space-y-6">
+                        <div>
+                            <label for="name" class="font-bold text-sm mb-2 block">Name</label>
+                            <input type="text" id="name" class="w-full px-5 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 outline-none transition-colors" placeholder="Your Name">
+                        </div>
+                        <div>
+                            <label for="email" class="font-bold text-sm mb-2 block">Email</label>
+                            <input type="email" id="email" class="w-full px-5 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 outline-none transition-colors" placeholder="your@email.com">
+                        </div>
+                        <div>
+                            <label for="message" class="font-bold text-sm mb-2 block">Message</label>
+                            <textarea id="message" rows="5" class="w-full px-5 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-black focus:ring-2 focus:ring-black/10 outline-none transition-colors" placeholder="How can I help?"></textarea>
+                        </div>
+                        <button type="submit" class="bg-black text-white px-8 py-4 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-xl shadow-black/10 w-full">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+             <div class="mt-20 pt-10 border-t border-black/5 flex flex-col md:flex-row justify-between items-center text-sm text-neutral-500">
+                <div>© 2025 Rafsan Ahmed Ratul. All rights reserved.</div>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-black">GitHub</a>
+                    <a href="#" class="hover:text-black">LinkedIn</a>
+                    <a href="#" class="hover:text-black">Facebook</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Gallery Modal -->
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 z-[100] hidden opacity-0 transition-opacity duration-300">
+        <!-- Close Button -->
+        <button id="lightbox-close" class="absolute top-6 right-8 text-white text-5xl opacity-70 hover:opacity-100 transition-opacity">&times;</button>
+        
+        <!-- Prev Button -->
+        <button id="lightbox-prev" class="absolute left-6 md:left-12 text-white text-3xl opacity-70 hover:opacity-100 transition-opacity p-4">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        
+        <!-- Next Button -->
+        <button id="lightbox-next" class="absolute right-6 md:right-12 text-white text-3xl opacity-70 hover:opacity-100 transition-opacity p-4">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <!-- Image Container -->
+        <div class="relative">
+            <img id="lightbox-image" src="" alt="Portfolio Project Image" class="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-2xl">
+            <div id="lightbox-counter" class="text-center text-white/70 text-sm mt-3 font-mono"></div>
+        </div>
+    </div>
+
+    <script>
+        // 1. FORCE SCROLL TO TOP ON RELOAD
+        if (history.scrollRestoration) {
+            history.scrollRestoration = 'manual';
+        } else {
+            window.onbeforeunload = function () {
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // 2. MOUSE SPOTLIGHT LOGIC
+        document.querySelectorAll('.skill-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // 3. 3D TILT LOGIC
+        document.querySelectorAll('.skill-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Calculate rotation based on mouse position relative to center
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                // Multipliers limit the rotation degree
+                const rotateX = ((y - centerY) / centerY) * -5; 
+                const rotateY = ((x - centerX) / centerX) * 5;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // Reset transformation on mouse leave
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            });
+        });
+
+        // 4. Scroll Reveal Logic
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 5. LIGHTBOX GALLERY LOGIC
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryGrid = document.getElementById('project-gallery-grid');
+            if (!galleryGrid) return;
+
+            const thumbnails = galleryGrid.querySelectorAll('.project-thumbnail');
+            const images = Array.from(thumbnails).map(thumb => thumb.src);
+            let currentImageIndex = 0;
+
+            const lightbox = document.getElementById('lightbox-overlay');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const lightboxClose = document.getElementById('lightbox-close');
+            const lightboxPrev = document.getElementById('lightbox-prev');
+            const lightboxNext = document.getElementById('lightbox-next');
+            const lightboxCounter = document.getElementById('lightbox-counter');
+
+            function showImage(index) {
+                lightboxImage.src = images[index];
+                lightboxCounter.textContent = `${index + 1} / ${images.length}`;
+                currentImageIndex = index;
+            }
+
+            function openLightbox(index) {
+                showImage(index);
+                lightbox.classList.remove('hidden');
+                setTimeout(() => lightbox.classList.remove('opacity-0'), 10); // For fade-in
+            }
+
+            function closeLightbox() {
+                lightbox.classList.add('opacity-0');
+                setTimeout(() => lightbox.classList.add('hidden'), 300); // For fade-out
+            }
+
+            thumbnails.forEach(thumb => {
+                thumb.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.dataset.index, 10);
+                    openLightbox(index);
+                });
+            });
+
+            lightboxClose.addEventListener('click', closeLightbox);
+            
+            lightboxNext.addEventListener('click', () => {
+                const nextIndex = (currentImageIndex + 1) % images.length;
+                showImage(nextIndex);
+            });
+
+            lightboxPrev.addEventListener('click', () => {
+                const prevIndex = (currentImageIndex - 1 + images.length) % images.length;
+                showImage(prevIndex);
+            });
+
+            // Close on backdrop click
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (lightbox.classList.contains('hidden')) return;
+
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                } else if (e.key === 'ArrowRight') {
+                    lightboxNext.click();
+                } else if (e.key === 'ArrowLeft') {
+                    lightboxPrev.click();
+                }
+            });
+        });
+
+        // 6. MOBILE MENU LOGIC
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const menuOverlay = document.getElementById('mobile-menu-overlay');
+            if (!menuBtn || !menuOverlay) return; // Guard clause
+
+            const menuLinks = menuOverlay.querySelectorAll('.mobile-menu-link');
+            const barsIcon = menuBtn.querySelector('.fa-bars');
+            const closeIcon = menuBtn.querySelector('.fa-times');
+
+            const toggleMenu = () => {
+                // Toggle the overlay visibility
+                menuOverlay.classList.toggle('hidden');
+                
+                // Use setTimeout for fade-in/out effect
+                if (menuOverlay.classList.contains('hidden')) {
+                    menuOverlay.classList.remove('opacity-100');
+                    menuOverlay.classList.add('opacity-0');
+                } else {
+                    // Needs a tiny delay to allow 'hidden' to be removed first
+                    setTimeout(() => {
+                        menuOverlay.classList.remove('opacity-0');
+                        menuOverlay.classList.add('opacity-100');
+                    }, 10);
+                }
+
+                // Toggle the icons
+                if (barsIcon && closeIcon) {
+                    barsIcon.classList.toggle('hidden');
+                    closeIcon.classList.toggle('hidden');
+                }
+            };
+
+            // Open/Close menu
+            menuBtn.addEventListener('click', toggleMenu);
+
+            // Close menu when a link is clicked
+            menuLinks.forEach(link => {
+                link.addEventListener('click', toggleMenu);
+            });
+        });
+    </script>
+</body>
+</html>
