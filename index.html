@@ -97,42 +97,98 @@
             color: transparent;
         }
 
-        /* 3D TILT & SPOTLIGHT CARD STYLES */
-        .skill-card {
+        /* 3D SKILL GLOBE STYLES */
+        .globe-container {
             position: relative;
-            overflow: hidden;
-            background: white;
-            border-radius: 1.5rem;
-            /* Smooth transition for shadow, faster for transform to feel responsive */
-            transition: box-shadow 0.3s ease, transform 0.1s ease-out;
-            will-change: transform;
+            width: 100%;
+            aspect-ratio: 1/1;
+            perspective: 800px; 
+            overflow: visible;
         }
-        
-        /* The "Spotlight" layer */
-        .skill-card::after {
-            content: "";
+        .globe-wrapper {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(
-                600px circle at var(--mouse-x) var(--mouse-y), 
-                rgba(0, 0, 0, 0.03), /* Subtle darkness for depth */
-                transparent 40%
-            );
-            opacity: 0;
-            transition: opacity 0.5s;
-            z-index: 1;
-            pointer-events: none;
+            top: 50%;
+            left: 50%;
+            transform-style: preserve-3d;
+            width: 0;
+            height: 0;
+        }
+        .globe-item {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center;
+            color: #0a0a0a;
+            text-decoration: none; 
+            white-space: nowrap;
+            transition: all 0.3s;
+            text-align: center;
+            line-height: 1;
+            cursor: pointer; 
+        }
+        /* Small glow on hover */
+        .globe-item:hover {
+            color: #C4F43E !important; 
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 100;
+            transform: scale(1.2) !important; 
         }
 
-        .skill-card:hover::after {
-            opacity: 1;
-        }
-        
-        /* Ensure content stays on top */
-        .skill-card > * {
+        /* ALBUM CARD STYLES */
+        .album-card {
             position: relative;
-            z-index: 2;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
         }
+        .album-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.2);
+        }
+        .album-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+            transition: background 0.3s ease;
+        }
+        .album-card:hover .album-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.1) 100%);
+        }
+        .album-card img {
+            transition: transform 0.7s ease;
+        }
+        .album-card:hover img {
+            transform: scale(1.1);
+        }
+        .album-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(8px);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
     </style>
 </head>
 <body class="antialiased selection:bg-black selection:text-accent">
@@ -152,6 +208,7 @@
                 <a href="#about" class="hover:text-neutral-600 transition-colors">About</a>
                 <a href="#skills" class="hover:text-neutral-600 transition-colors">Skills</a>
                 <a href="#projects" class="hover:text-neutral-600 transition-colors">Projects</a>
+                <a href="#gallery" class="hover:text-neutral-600 transition-colors">Gallery</a>
                 <a href="#contact" class="hover:text-neutral-600 transition-colors">Contact</a>
                 <a href="./Rafsan Ahmed Ratul CV.pdf" download class="bg-black text-white px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-300 flex items-center gap-2
                                     hover:bg-neutral-800 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20">
@@ -166,12 +223,13 @@
         </div>
     </nav>
 
-    <!-- Mobile Menu Overlay (hidden by default) -->
+    <!-- Mobile Menu Overlay -->
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-white/90 backdrop-blur-xl z-40 flex flex-col items-center justify-start pt-24 gap-8 text-2xl font-display font-bold
                                         hidden opacity-0 transition-opacity duration-300">
         <a href="#about" class="mobile-menu-link hover:text-neutral-600">About</a>
         <a href="#skills" class="mobile-menu-link hover:text-neutral-600">Skills</a>
         <a href="#projects" class="mobile-menu-link hover:text-neutral-600">Projects</a>
+        <a href="#gallery" class="mobile-menu-link hover:text-neutral-600">Gallery</a>
         <a href="#contact" class="mobile-menu-link hover:text-neutral-600">Contact</a>
     </div>
 
@@ -207,7 +265,7 @@
                 </div>
 
                 <div class="mt-12 flex items-center gap-6 text-2xl text-neutral-400 reveal-on-scroll delay-500">
-                     <a href=""https://github.com/RafsanBro" target="_blank" class="hover:text-black transition-colors hover:-translate-y-1 duration-300"><i class="fa-brands fa-github"></i></a>
+                     <a href="https://github.com/RafsanBro" target="_blank" class="hover:text-black transition-colors hover:-translate-y-1 duration-300"><i class="fa-brands fa-github"></i></a>
                      <a href="https://www.linkedin.com/in/rafsan-ahmed-9787b0228/" target="_blank" class="hover:text-black transition-colors hover:-translate-y-1 duration-300"><i class="fa-brands fa-linkedin"></i></a>
                      <a href="https://www.facebook.com/profile.php?id=61575681944714"  target="_blank" class="hover:text-black transition-colors hover:-translate-y-1 duration-300"><i class="fa-brands fa-facebook"></i></a>
                 </div>
@@ -221,7 +279,7 @@
                 <!-- Image Container -->
                 <div class="relative w-72 h-72 md:w-96 md:h-96">
                     <!-- Profile Picture (Placeholder) -->
-                    <img src="profile.jpg" 
+                    <img src="profile1.jpg" 
                          alt="Rafsan Ahmed Ratul" 
                          class="w-full h-full object-cover rounded-[2rem] rotate-3 hover:rotate-0 transition-transform duration-500 shadow-2xl shadow-black/5 border-4 border-white">
                     
@@ -317,7 +375,6 @@
                 <span class="stroke-text">Node.js</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
              <div class="flex items-center gap-3">
                 <i class="fa-solid fa-wind text-3xl transition-colors duration-300 group-hover:text-cyan-300"></i>
                 <span>Tailwind</span>
@@ -326,7 +383,7 @@
         </div>
     </div>
 
-    <!-- Experience & About Grid (Moved Up) -->
+    <!-- Experience & About Grid -->
     <section id="about" class="py-32 px-6 bg-white relative z-10">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
             
@@ -380,136 +437,52 @@
         </div>
     </section>
 
-    <!-- Services / Skills Section (Renamed) -->
+    <!-- 3D SKILL GLOBES SECTION -->
     <section id="skills" class="py-32 px-6 bg-gray-50">
-        <div class="max-w-7xl mx-auto">
+        <div class="max-w-full mx-auto px-4">
             <div class="text-center max-w-2xl mx-auto mb-20 reveal-on-scroll">
                 <h2 class="text-sm font-bold tracking-widest uppercase text-neutral-500 mb-3">My Expertise</h2>
-                <h3 class="text-4xl md:text-5xl font-display font-bold">Technical Skills & Tools</h3>
+                <h3 class="text-4xl md:text-5xl font-display font-bold">Interactive Skill Spheres</h3>
+                <p class="text-neutral-500 mt-4">A 3D visualization of my technical stack.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Skill Card 1: Frontend -->
-                <div class="skill-card bg-white p-8 rounded-3xl border border-black/5 shadow-sm group reveal-on-scroll">
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl text-blue-600 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-code"></i>
-                        </div>
-                        <h4 class="text-2xl font-bold">Frontend</h4>
+            <!-- 4 Globes Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+                
+                <!-- Globe 1: Frontend -->
+                <div class="bg-white p-4 rounded-3xl border border-black/5 shadow-lg flex flex-col items-center reveal-on-scroll">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-lg text-blue-600"><i class="fa-solid fa-code"></i></div>
+                        <h4 class="text-xl font-bold">Frontend</h4>
                     </div>
-                    <div class="grid grid-cols-3 sm:grid-cols-5 gap-6">
-                        <!-- HTML -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-brands fa-html5 text-4xl text-orange-500"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">HTML</span>
-                        </div>
-                        <!-- CSS -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-brands fa-css3-alt text-4xl text-blue-600"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">CSS</span>
-                        </div>
-                        <!-- JS -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-brands fa-js text-4xl text-yellow-400"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">JS</span>
-                        </div>
-                        <!-- React -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-brands fa-react text-4xl text-cyan-400 animate-spin-slow"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">React</span>
-                        </div>
-                        <!-- Tailwind -->
-                         <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-wind text-4xl text-cyan-300"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Tailwind</span>
-                        </div>
-                    </div>
+                    <div class="globe-container" id="globe-frontend"></div>
                 </div>
 
-                <!-- Skill Card 2: Backend -->
-                <div class="skill-card bg-white p-8 rounded-3xl border border-black/5 shadow-sm group reveal-on-scroll delay-100">
-                    <div class="flex items-center gap-4 mb-8">
-                         <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-2xl text-green-600 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-server"></i>
-                        </div>
-                        <h4 class="text-2xl font-bold">Backend <span class="text-sm font-normal text-neutral-400">(Learning)</span></h4>
+                <!-- Globe 2: Backend -->
+                <div class="bg-white p-4 rounded-3xl border border-black/5 shadow-lg flex flex-col items-center reveal-on-scroll delay-100">
+                    <div class="flex items-center gap-3 mb-6">
+                         <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center text-lg text-green-600"><i class="fa-solid fa-server"></i></div>
+                        <h4 class="text-xl font-bold">Backend</h4>
                     </div>
-                    <div class="grid grid-cols-3 sm:grid-cols-4 gap-6">
-                         <!-- Node -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-brands fa-node-js text-4xl text-green-500"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Node.js</span>
-                        </div>
-                        <!-- Express -->
-                         <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-network-wired text-4xl text-gray-800"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Express</span>
-                        </div>
-                        <!-- Python -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-brands fa-python text-4xl text-blue-500"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Python</span>
-                        </div>
-                         <!-- Django -->
-                         <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-layer-group text-4xl text-green-700"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Django</span>
-                        </div>
-                    </div>
+                    <div class="globe-container" id="globe-backend"></div>
                 </div>
 
-                <!-- Skill Card 3: Data Science -->
-                <div class="skill-card bg-white p-8 rounded-3xl border border-black/5 shadow-sm group reveal-on-scroll delay-200">
-                      <div class="flex items-center gap-4 mb-8">
-                         <div class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl text-purple-600 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-chart-pie"></i>
-                        </div>
-                        <h4 class="text-2xl font-bold">Data Science <span class="text-sm font-normal text-neutral-400">(Learning)</span></h4>
+                <!-- Globe 3: Data Science -->
+                <div class="bg-white p-4 rounded-3xl border border-black/5 shadow-lg flex flex-col items-center reveal-on-scroll delay-200">
+                    <div class="flex items-center gap-3 mb-6">
+                         <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-lg text-purple-600"><i class="fa-solid fa-chart-pie"></i></div>
+                        <h4 class="text-xl font-bold">Data Science</h4>
                     </div>
-                      <div class="grid grid-cols-3 sm:grid-cols-3 gap-6">
-                        <!-- Pandas -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-table text-4xl text-purple-600"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Pandas</span>
-                        </div>
-                        <!-- NumPy -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-cube text-4xl text-blue-400"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">NumPy</span>
-                        </div>
-                         <!-- ML -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-brain text-4xl text-pink-500"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">ML</span>
-                        </div>
-                    </div>
+                    <div class="globe-container" id="globe-datascience"></div>
                 </div>
 
-                <!-- Skill Card 4: Tools -->
-                 <div class="skill-card bg-white p-8 rounded-3xl border border-black/5 shadow-sm group reveal-on-scroll delay-300">
-                       <div class="flex items-center gap-4 mb-8">
-                         <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-2xl text-orange-600 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-screwdriver-wrench"></i>
-                        </div>
-                        <h4 class="text-2xl font-bold">Tools</h4>
+                <!-- Globe 4: Tools -->
+                <div class="bg-white p-4 rounded-3xl border border-black/5 shadow-lg flex flex-col items-center reveal-on-scroll delay-300">
+                    <div class="flex items-center gap-3 mb-6">
+                         <div class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-lg text-orange-600"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                        <h4 class="text-xl font-bold">Tools</h4>
                     </div>
-                       <div class="grid grid-cols-3 sm:grid-cols-3 gap-6">
-                        <!-- Git -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-brands fa-git-alt text-4xl text-orange-600"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Git</span>
-                        </div>
-                         <!-- Docker -->
-                        <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-brands fa-docker text-4xl text-blue-600"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">Docker</span>
-                        </div>
-                        <!-- VSCode -->
-                         <div class="flex flex-col items-center gap-2 group/icon cursor-pointer hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-code text-4xl text-blue-500"></i>
-                            <span class="text-xs font-bold text-neutral-500 group-hover:text-black">VSCode</span>
-                        </div>
-                    </div>
+                    <div class="globe-container" id="globe-tools"></div>
                 </div>
 
             </div>
@@ -534,26 +507,26 @@
                         <!-- Image 1 -->
                         <img src="p1.png" 
                              alt="Portfolio Screenshot 1" 
-                             data-index="0"
-                             class="project-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100 cursor-pointer">
+                             data-gallery="project" data-index="0"
+                             class="gallery-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100 cursor-pointer">
                         
                         <!-- Image 2 -->
                         <img src="p2.png" 
                              alt="Portfolio Screenshot 2" 
-                             data-index="1"
-                             class="project-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100" style="transition-delay: 100ms; cursor: pointer;">
+                             data-gallery="project" data-index="1"
+                             class="gallery-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100" style="transition-delay: 100ms; cursor: pointer;">
                         
                         <!-- Image 3 -->
                         <img src="p3.png" 
                              alt="Portfolio Screenshot 3" 
-                             data-index="2"
-                             class="project-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100" style="transition-delay: 200ms; cursor: pointer;">
+                             data-gallery="project" data-index="2"
+                             class="gallery-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100" style="transition-delay: 200ms; cursor: pointer;">
                         
                         <!-- Image 4 -->
                         <img src="p4.png" 
                              alt="Portfolio Screenshot 4" 
-                             data-index="3"
-                             class="project-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100" style="transition-delay: 300ms; cursor: pointer;">
+                             data-gallery="project" data-index="3"
+                             class="gallery-thumbnail w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100" style="transition-delay: 300ms; cursor: pointer;">
                     </div>
 
                     <!-- Project Description -->
@@ -575,6 +548,62 @@
                 </div>
             </div> <!-- End of single project box -->
 
+        </div>
+    </section>
+
+    <!-- Personal Gallery Section - ALBUM COLLECTIONS -->
+    <section id="gallery" class="py-32 px-6 bg-white relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal-on-scroll">
+                <h2 class="text-sm font-bold tracking-widest uppercase text-neutral-500 mb-3">More About Me</h2>
+                <h3 class="text-4xl md:text-5xl font-display font-bold">Personal Gallery</h3>
+                <p class="text-neutral-600 mt-4 text-lg">A small collection of photos from my personal life, social work, and extracurricular activities.</p>
+            </div>
+
+            <!-- Albums Grid -->
+            <div id="album-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Album 1: Social Work -->
+                <div class="album-card group reveal-on-scroll" data-album="social-work">
+                    <img src="Social/SocialCover.jpeg" alt="Social Work Cover" class="w-full h-full object-cover">
+                    <div class="album-overlay">
+                        <div class="album-badge"><i class="fa-solid fa-images"></i>View</div>
+                        <h4 class="text-white text-2xl font-bold font-display">Social Work</h4>
+                        <p class="text-white/80 text-xs mt-1 font-sans uppercase tracking-wider">August 2024 Bangladesh floods</p>
+                    </div>
+                </div>
+
+                <!-- Album 2: University Life -->
+                <div class="album-card group reveal-on-scroll delay-100" data-album="university">
+                    <img src="University Life/15.jpeg" alt="University Cover" class="w-full h-full object-cover">
+                    <div class="album-overlay">
+                        <div class="album-badge"><i class="fa-solid fa-images"></i>View</div>
+                        <h4 class="text-white text-2xl font-bold font-display">Campus Life</h4>
+                        <p class="text-white/80 text-xs mt-1 font-sans uppercase tracking-wider">Memories at AIUB</p>
+                    </div>
+                </div>
+
+                <!-- Album 3: Extracurricular activities -->
+                <div class="album-card group reveal-on-scroll delay-200" data-album="photography">
+                    <img src="Extracurricular Activities/5.jpeg" alt="Photography Cover" class="w-full h-full object-cover">
+                    <div class="album-overlay">
+                        <div class="album-badge"><i class="fa-solid fa-images"></i>View</div>
+                        <h4 class="text-white text-2xl font-bold font-display">Extracurricular Activities</h4>
+                        <p class="text-white/80 text-xs mt-1 font-sans uppercase tracking-wider">Academic & Personal</p>
+                    </div>
+                </div>
+
+                <!-- Album 4: July Revolution -->
+                <div class="album-card group reveal-on-scroll delay-300" data-album="travel">
+                    <img src="July Revolution/2.jpeg" alt="Travel Cover" class="w-full h-full object-cover">
+                    <div class="album-overlay">
+                        <div class="album-badge"><i class="fa-solid fa-images"></i>View</div>
+                        <h4 class="text-white text-2xl font-bold font-display">July Revolution</h4>
+                        <p class="text-white/80 text-xs mt-1 font-sans uppercase tracking-wider">Pro-democracy uprising in Bangladesh</p>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </section>
 
@@ -700,42 +729,7 @@
             }
         }
 
-        // 2. MOUSE SPOTLIGHT LOGIC
-        document.querySelectorAll('.skill-card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
-            });
-        });
-
-        // 3. 3D TILT LOGIC
-        document.querySelectorAll('.skill-card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                // Calculate rotation based on mouse position relative to center
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                // Multipliers limit the rotation degree
-                const rotateX = ((y - centerY) / centerY) * -5; 
-                const rotateY = ((x - centerX) / centerX) * 5;
-
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                // Reset transformation on mouse leave
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-            });
-        });
-
-        // 4. Scroll Reveal Logic
+        // 2. SCROLL REVEAL LOGIC
         const observerOptions = {
             threshold: 0.1
         };
@@ -753,84 +747,245 @@
             observer.observe(el);
         });
 
-        // 5. MERGED LIGHTBOX & MOBILE MENU LOGIC
+        // 3. 3D SKILL GLOBE GENERATOR
+        function createGlobe(containerId, skills) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = 'globe-wrapper';
+            container.appendChild(wrapper);
+            
+            const count = skills.length;
+            const phi = Math.PI * (3 - Math.sqrt(5)); 
+            const radius = 70; 
+            
+            skills.forEach((skill, i) => {
+                const y = 1 - (i / (count - 1)) * 2; 
+                const r = Math.sqrt(1 - y * y); 
+                
+                const theta = phi * i; 
+                
+                const x = Math.cos(theta) * r;
+                const z = Math.sin(theta) * r;
+                
+                const tx = x * radius;
+                const ty = y * radius;
+                const tz = z * radius;
+                
+                const el = document.createElement('a');
+                el.className = 'globe-item';
+                el.href = skill.url || '#'; 
+                el.target = '_blank';
+                el.rel = 'noopener noreferrer';
+                
+                const iconHtml = skill.icon ? `<i class="${skill.icon} text-xl mb-1"></i>` : '';
+                const nameHtml = `<span class="text-[10px] font-bold">${skill.name || ''}</span>`;
+                el.innerHTML = iconHtml + nameHtml;
+
+                if(skill.color) el.style.color = skill.color;
+                
+                el.dataset.tx = tx;
+                el.dataset.ty = ty;
+                el.dataset.tz = tz;
+
+                wrapper.appendChild(el);
+            });
+
+            let angleX = 0.001;
+            let angleY = 0.002;
+            let currentRotationX = 0;
+            let currentRotationY = 0;
+
+            function animate() {
+                currentRotationX += angleX;
+                currentRotationY += angleY;
+                
+                const cosX = Math.cos(currentRotationX);
+                const sinX = Math.sin(currentRotationX);
+                const cosY = Math.cos(currentRotationY);
+                const sinY = Math.sin(currentRotationY);
+
+                Array.from(wrapper.children).forEach(child => {
+                    const tx = parseFloat(child.dataset.tx);
+                    const ty = parseFloat(child.dataset.ty);
+                    const tz = parseFloat(child.dataset.tz);
+
+                    const x1 = tx * cosY - tz * sinY;
+                    const z1 = tz * cosY + tx * sinY;
+                    
+                    const y2 = ty * cosX - z1 * sinX;
+                    const z2 = z1 * cosX + ty * sinX;
+
+                    const scale = (z2 + 250) / 250; 
+                    const opacity = (z2 + 100) / 200 + 0.3;
+
+                    child.style.transform = `translate3d(${x1}px, ${y2}px, ${z2}px) scale(${scale})`;
+                    child.style.opacity = Math.max(0.2, Math.min(1, opacity));
+                    child.style.zIndex = Math.round(z2);
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // 4. MERGED SETUP (Lightbox, Menu, Globes)
         document.addEventListener('DOMContentLoaded', () => {
             
+            // --- GLOBE INITIALIZATION WITH URLs ---
+            createGlobe('globe-frontend', [
+                { name: 'HTML', icon: 'fa-brands fa-html5', color: '#e34f26', url: 'https://developer.mozilla.org/en-US/docs/Web/HTML' },
+                { name: 'CSS', icon: 'fa-brands fa-css3-alt', color: '#264de4', url: 'https://developer.mozilla.org/en-US/docs/Web/CSS' },
+                { name: 'JS', icon: 'fa-brands fa-js', color: '#f7df1e', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
+                { name: 'React', icon: 'fa-brands fa-react', color: '#61dafb', url: 'https://react.dev/' },
+                { name: 'Tailwind', icon: 'fa-solid fa-wind', color: '#06b6d4', url: 'https://tailwindcss.com/' }, 
+                { name: 'Bootstrap', icon: 'fa-brands fa-bootstrap', color: '#7952b3', url: 'https://getbootstrap.com/' },
+                { name: 'Sass', icon: 'fa-brands fa-sass', color: '#cc6699', url: 'https://sass-lang.com/' }
+            ]);
+
+            createGlobe('globe-backend', [
+                { name: 'Node.js', icon: 'fa-brands fa-node-js', color: '#68a063', url: 'https://nodejs.org/' },
+                { name: 'Python', icon: 'fa-brands fa-python', color: '#306998', url: 'https://www.python.org/' },
+                { name: 'SQL', icon: 'fa-solid fa-database', color: '#f29111', url: 'https://en.wikipedia.org/wiki/SQL' }, 
+                { name: 'PHP', icon: 'fa-brands fa-php', color: '#8993be', url: 'https://www.php.net/' },
+                { name: 'Java', icon: 'fa-brands fa-java', color: '#5382a1', url: 'https://www.java.com/' },
+                { name: 'API', color: '#000', url: 'https://en.wikipedia.org/wiki/API' }
+            ]);
+
+            createGlobe('globe-datascience', [
+                { name: 'Viz', icon: 'fa-solid fa-chart-line', color: '#eab308', url: 'https://en.wikipedia.org/wiki/Data_visualization' },
+                { name: 'ML', icon: 'fa-solid fa-brain', color: '#ec4899', url: 'https://en.wikipedia.org/wiki/Machine_learning' }, 
+                { name: 'Pandas', color: '#150458', url: 'https://pandas.pydata.org/' },
+                { name: 'NumPy', color: '#013243', url: 'https://numpy.org/' },
+                { name: 'Python', icon: 'fa-brands fa-python', color: '#306998', url: 'https://www.python.org/' },
+                { name: 'Data', icon: 'fa-solid fa-table', color: '#6b7280', url: 'https://en.wikipedia.org/wiki/Data_science' }
+            ]);
+
+            createGlobe('globe-tools', [
+                { name: 'Git', icon: 'fa-brands fa-git-alt', color: '#f14e32', url: 'https://git-scm.com/' },
+                { name: 'Docker', icon: 'fa-brands fa-docker', color: '#0db7ed', url: 'https://www.docker.com/' },
+                { name: 'GitHub', icon: 'fa-brands fa-github', color: '#181717', url: 'https://github.com/' },
+                { name: 'Terminal', icon: 'fa-solid fa-terminal', color: '#000', url: 'https://en.wikipedia.org/wiki/Computer_terminal' },
+                { name: 'VSCode', icon: 'fa-solid fa-code', color: '#007acc', url: 'https://code.visualstudio.com/' }, 
+                { name: 'Trello', icon: 'fa-brands fa-trello', color: '#0079bf', url: 'https://trello.com/' }
+            ]);
+            
+            // --- ALBUM DATA CONFIGURATION ---
+            const albumData = {
+                'social-work': [
+                    'Social/12.jpg','Social/2.png','Social/11.jpg','Social/4.png','Social/13.jpg','Social/6.png','Social/14.jpg','Social/8.png','Social/15.jpg','Social/9.png','Social/16.png',
+                ],
+                'university': [
+                    'University Life/7.jpeg', 'University Life/2.jpeg', 'University Life/3.jpeg', 'University Life/4.jpeg',
+                    'University Life/5.jpeg', 'University Life/6.jpeg', 'University Life/1.jpeg', 'University Life/8.jpeg',
+                    'University Life/9.jpeg', 'University Life/10.jpeg', 'University Life/11.jpeg', 'University Life/12.jpeg',
+                    'University Life/13.jpeg', 'University Life/14.jpeg', 'University Life/15.jpeg'
+                ],
+                'photography': [
+                    'Extracurricular Activities/1.jpeg', 'Extracurricular Activities/2.jpeg', 'Extracurricular Activities/3.jpeg', 'Extracurricular Activities/4.jpeg',
+                    'Extracurricular Activities/5.jpeg', 'Extracurricular Activities/6.jpeg'
+                ],
+                'travel': [
+                    'July Revolution/1.jpeg', 'July Revolution/2.jpeg', 'July Revolution/3.jpeg', 'July Revolution/4.jpeg',
+                    'July Revolution/5.jpeg', 'July Revolution/6.jpeg', 'July Revolution/7.jpeg', 'July Revolution/8.jpeg'
+                ]
+            };
+
             // --- LIGHTBOX GALLERY SETUP ---
             const galleryGrid = document.getElementById('project-gallery-grid');
+            
+            let currentGalleryImages = []; 
+            let currentImageIndex = 0;
+
+            const lightbox = document.getElementById('lightbox-overlay');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const lightboxClose = document.getElementById('lightbox-close');
+            const lightboxPrev = document.getElementById('lightbox-prev');
+            const lightboxNext = document.getElementById('lightbox-next');
+            const lightboxCounter = document.getElementById('lightbox-counter');
+
+            function showImage(index) {
+                if (!currentGalleryImages || currentGalleryImages.length === 0) return;
+                // Ensure index wrap-around
+                if (index < 0) index = currentGalleryImages.length - 1;
+                if (index >= currentGalleryImages.length) index = 0;
+                
+                currentImageIndex = index;
+                lightboxImage.src = currentGalleryImages[currentImageIndex];
+                lightboxCounter.textContent = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
+            }
+
+            function openLightbox(images, startIndex = 0) {
+                currentGalleryImages = images;
+                showImage(startIndex);
+                lightbox.classList.remove('hidden');
+                setTimeout(() => lightbox.classList.remove('opacity-0'), 10); 
+            }
+
+            function closeLightbox() {
+                lightbox.classList.add('opacity-0');
+                setTimeout(() => lightbox.classList.add('hidden'), 300); 
+            }
+
+            // Event Listeners for Project Gallery
             if (galleryGrid) {
-                const thumbnails = galleryGrid.querySelectorAll('.project-thumbnail');
-                const images = Array.from(thumbnails).map(thumb => thumb.src);
-                let currentImageIndex = 0;
-
-                const lightbox = document.getElementById('lightbox-overlay');
-                const lightboxImage = document.getElementById('lightbox-image');
-                const lightboxClose = document.getElementById('lightbox-close');
-                const lightboxPrev = document.getElementById('lightbox-prev');
-                const lightboxNext = document.getElementById('lightbox-next');
-                const lightboxCounter = document.getElementById('lightbox-counter');
-
-                function showImage(index) {
-                    lightboxImage.src = images[index];
-                    lightboxCounter.textContent = `${index + 1} / ${images.length}`;
-                    currentImageIndex = index;
-                }
-
-                function openLightbox(index) {
-                    showImage(index);
-                    lightbox.classList.remove('hidden');
-                    setTimeout(() => lightbox.classList.remove('opacity-0'), 10); // For fade-in
-                }
-
-                function closeLightbox() {
-                    lightbox.classList.add('opacity-0');
-                    setTimeout(() => lightbox.classList.add('hidden'), 300); // For fade-out
-                }
-
-                thumbnails.forEach(thumb => {
-                    thumb.addEventListener('click', (e) => {
-                        const index = parseInt(e.target.dataset.index, 10);
-                        openLightbox(index);
+                const projectImages = Array.from(galleryGrid.querySelectorAll('.gallery-thumbnail')).map(img => img.src);
+                
+                galleryGrid.querySelectorAll('.gallery-thumbnail').forEach((thumb, index) => {
+                    thumb.addEventListener('click', () => {
+                        openLightbox(projectImages, index);
                     });
                 });
+            }
 
-                if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
-                
-                if (lightboxNext) lightboxNext.addEventListener('click', () => {
-                    const nextIndex = (currentImageIndex + 1) % images.length;
-                    showImage(nextIndex);
-                });
-
-                if (lightboxPrev) lightboxPrev.addEventListener('click', () => {
-                    const prevIndex = (currentImageIndex - 1 + images.length) % images.length;
-                    showImage(prevIndex);
-                });
-
-                // Close on backdrop click
-                if (lightbox) lightbox.addEventListener('click', (e) => {
-                    if (e.target === lightbox) {
-                        closeLightbox();
+            // Event Listeners for Personal Albums
+            document.querySelectorAll('.album-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const albumId = card.dataset.album;
+                    const images = albumData[albumId];
+                    if (images && images.length > 0) {
+                        openLightbox(images, 0);
                     }
                 });
+            });
 
-                // Keyboard navigation
-                document.addEventListener('keydown', (e) => {
-                    if (lightbox.classList.contains('hidden')) return;
+            if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+            
+            if (lightboxNext) lightboxNext.addEventListener('click', () => {
+                showImage(currentImageIndex + 1);
+            });
 
-                    if (e.key === 'Escape') {
-                        closeLightbox();
-                    } else if (e.key === 'ArrowRight') {
-                        lightboxNext.click();
-                    } else if (e.key === 'ArrowLeft') {
-                        lightboxPrev.click();
-                    }
-                });
-            } // End of Lightbox Setup
+            if (lightboxPrev) lightboxPrev.addEventListener('click', () => {
+                showImage(currentImageIndex - 1);
+            });
+
+            // Close on backdrop click
+            if (lightbox) lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (!lightbox || lightbox.classList.contains('hidden')) return;
+
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                } else if (e.key === 'ArrowRight') {
+                    showImage(currentImageIndex + 1);
+                } else if (e.key === 'ArrowLeft') {
+                    showImage(currentImageIndex - 1);
+                }
+            });
+            // --- End of Lightbox Setup ---
+
 
             // --- MOBILE MENU SETUP ---
             const menuBtn = document.getElementById('mobile-menu-btn');
             const menuOverlay = document.getElementById('mobile-menu-overlay');
-            if (!menuBtn || !menuOverlay) return; // Guard clause
+            if (!menuBtn || !menuOverlay) return; 
 
             const menuLinks = menuOverlay.querySelectorAll('.mobile-menu-link');
             const barsIcon = menuBtn.querySelector('.fa-bars');
@@ -872,7 +1027,3 @@
     </script>
 </body>
 </html>
-
-
-
-
