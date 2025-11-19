@@ -308,43 +308,36 @@
                 <span>JavaScript</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
             <div class="flex items-center gap-3">
                 <i class="fa-brands fa-python text-3xl transition-colors duration-300 group-hover:text-blue-400"></i>
                 <span class="stroke-text">Python</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
             <div class="flex items-center gap-3">
                 <i class="fa-brands fa-react text-3xl transition-colors duration-300 group-hover:text-cyan-400"></i>
                 <span>React</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
             <div class="flex items-center gap-3">
                 <i class="fa-brands fa-node-js text-3xl transition-colors duration-300 group-hover:text-green-500"></i>
                 <span class="stroke-text">Node.js</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-wind text-3xl transition-colors duration-300 group-hover:text-cyan-300"></i>
                 <span>Tailwind</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-code text-3xl transition-colors duration-300 group-hover:text-blue-600"></i>
                 <span class="stroke-text">C++</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
             <div class="flex items-center gap-3">
                 <i class="fa-brands fa-figma text-3xl transition-colors duration-300 group-hover:text-purple-500"></i>
                 <span>Figma</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-table text-3xl transition-colors duration-300 group-hover:text-white"></i>
                 <span class="stroke-text">Pandas</span>
@@ -357,19 +350,16 @@
                 <span>JavaScript</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
             <div class="flex items-center gap-3">
                 <i class="fa-brands fa-python text-3xl transition-colors duration-300 group-hover:text-blue-400"></i>
                 <span class="stroke-text">Python</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
             <div class="flex items-center gap-3">
                 <i class="fa-brands fa-react text-3xl transition-colors duration-300 group-hover:text-cyan-400"></i>
                 <span>React</span>
             </div>
             <span class="text-accent text-xl">✦</span>
-            
             <div class="flex items-center gap-3">
                 <i class="fa-brands fa-node-js text-3xl transition-colors duration-300 group-hover:text-green-500"></i>
                 <span class="stroke-text">Node.js</span>
@@ -907,7 +897,6 @@
 
             function showImage(index) {
                 if (!currentGalleryImages || currentGalleryImages.length === 0) return;
-                // Ensure index wrap-around
                 if (index < 0) index = currentGalleryImages.length - 1;
                 if (index >= currentGalleryImages.length) index = 0;
                 
@@ -949,6 +938,31 @@
                     }
                 });
             });
+            
+            // --- LIGHTBOX TOUCH SWIPE SUPPORT ---
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            lightbox.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            lightbox.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const swipeThreshold = 50; // minimum distance for swipe
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    // Swipe Left -> Next Image
+                    showImage(currentImageIndex + 1);
+                }
+                if (touchEndX > touchStartX + swipeThreshold) {
+                    // Swipe Right -> Previous Image
+                    showImage(currentImageIndex - 1);
+                }
+            }
 
             if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
             
@@ -1027,5 +1041,3 @@
     </script>
 </body>
 </html>
-
-
